@@ -1,0 +1,13 @@
+.login {
+  .captcha {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    img {
+      flex-shrink: 0;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+  }
+}

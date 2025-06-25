@@ -1,0 +1,24 @@
+.basicLayout {
+  height: 100vh;
+  overflow: auto;
+
+  .ant-pro-layout {
+      height: 100%;
+
+      .ant-pro-layout-content {
+        padding-bottom: 96px;
+      }
+
+      /* 增强当前选中菜单项的样式 */
+      .ant-menu-item-selected {
+        background-color: #1890ff !important;
+        color: white !important;
+        font-weight: bold !important;
+      }
+
+      /* 悬停效果 */
+      .ant-menu-item:hover {
+        color: #1890ff !important;
+      }
+  }
+}

@@ -1,0 +1,127 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import { Dropdown, Input } from 'antd'
+import React from 'react'
+import GlobalFooter from '@/layouts/components/GlobalFooter'
+import Image from 'next/image'
+import { GithubFilled, LogoutOutlined } from '@ant-design/icons'
+import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import './index.scss'
+import menus, { getMenus } from '../../../config/menu'
+import userStore from '@/stores/user'
+import userApi from '@/api/user'
+
+const ProLayout = dynamic(() => import('@ant-design/pro-components').then((mod) => mod.ProLayout), {
+  // ssr: false,
+})
+
+const SearchInput = () => {
+  return (
+    <div
+      key="SearchOutlined"
+      aria-hidden
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginInlineEnd: 24,
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation()
+        e.preventDefault()
+      }}
+    >
+      <Input
+        style={{
+          borderRadius: 4,
+          marginInlineEnd: 12,
+        }}
+        placeholder="搜索题目"
+        variant="borderless"
+      />
+    </div>
+  )
+}
+
+interface BasicLayoutProps {
+  children: React.ReactNode
+}
+
+export default function BasicLayout({ children }: BasicLayoutProps) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const { userinfo, reset } = userStore()
+
+  const handleLogout = async () => {
+    await userApi.logout()
+    reset()
+    router.push('/user/login')
+  }
+  return (
+    <div className="basicLayout">
+      <ProLayout
+        layout="top"
+        title="多多刷题平台"
+        logo={<Image src="/assets/logo.png" alt="多多刷题网站" width={32} height={32} />}
+        location={{ pathname }}
+        footerRender={() => <GlobalFooter />}
+        avatarProps={{
+          src: userinfo.userAvatar || '/assets/default_avatar.jpg',
+          size: 'small',
+          title: userinfo.userName,
+          render: (props, dom) => {
+            return userinfo.id ? (
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: 'logout',
+                      icon: <LogoutOutlined />,
+                      label: '退出登录',
+                    },
+                  ],
+                  onClick: async (e) => {
+                    if (e.key === 'logout') {
+                      await handleLogout()
+                    }
+                  },
+                }}
+              >
+                {dom}
+              </Dropdown>
+            ) : (
+              <div onClick={() => router.push('/user/login')}>{dom}</div>
+            )
+          },
+        }}
+        actionsRender={(props) => {
+          if (props.isMobile) return []
+          return [
+            <SearchInput key="SearchInput" />,
+            <a target="_blank" key="a">
+              <GithubFilled />
+            </a>,
+          ]
+        }}
+        headerTitleRender={(logo, title, _) => {
+          return (
+            <a target="_blank">
+              {logo}
+              {title}
+            </a>
+          )
+        }}
+        onMenuHeaderClick={(e) => console.log(e)}
+        menuDataRender={() => getMenus(userinfo, menus)}
+        menuItemRender={(item, dom) => (
+          <Link href={item.path || '/'} target={item.target}>
+            {dom}
+          </Link>
+        )}
+      >
+        {children}
+      </ProLayout>
+    </div>
+  )
+}
