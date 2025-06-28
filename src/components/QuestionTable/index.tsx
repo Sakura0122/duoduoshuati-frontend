@@ -3,11 +3,13 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { ProTable, ProFormSelect } from '@ant-design/pro-components'
 import React, { useRef, useState } from 'react'
 import TagList from '@/components/TagList'
-import { Button, TablePaginationConfig } from 'antd'
+import { Space, TablePaginationConfig } from 'antd'
 import Link from 'next/link'
 import { QuestionListDto, QuestionVO } from '@/api/question/type'
 import questionApi from '@/api/question'
 import { PageDto } from '@/types/type'
+import VipTag from '@/components/VipTag'
+import './index.scss'
 
 interface Props {
   // 默认值（用于展示服务端渲染的数据）
@@ -108,7 +110,12 @@ const QuestionTable = (props: Props) => {
         )
       },
       render: (_, record) => {
-        return <TagList tagList={JSON.parse(record.tags) || []} />
+        return (
+          <Space>
+            {record.isVip === 1 && <VipTag />}
+            <TagList tagList={JSON.parse(record.tags) || []} />
+          </Space>
+        )
       },
     },
   ]

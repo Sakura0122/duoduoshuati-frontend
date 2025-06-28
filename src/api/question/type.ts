@@ -28,6 +28,14 @@ export interface Question {
    */
   title: string
   /**
+   * 是否vip
+   */
+  isVip: number
+  /**
+   * status
+   */
+  status: number
+  /**
    * 更新时间
    */
   updateTime: string
@@ -62,6 +70,14 @@ export interface AddQuestionDto {
    * 题目难度
    */
   difficulty: number
+  /**
+   * 是否vip
+   */
+  isVip: number
+  /**
+   * status
+   */
+  status: number
 }
 
 export interface UpdateQuestionDto extends AddQuestionDto {
@@ -96,6 +112,14 @@ export interface QuestionListDto {
    * 题目难度
    */
   difficulty?: number
+  /**
+   * 是否vip
+   */
+  isVip?: number
+  /**
+   * status
+   */
+  status?: number
 }
 
 export interface QuestionVO {
@@ -123,4 +147,12 @@ export interface QuestionVO {
    * 题目难度
    */
   difficulty: number
+  /**
+   * 是否vip
+   */
+  isVip: number
+  /**
+   * status
+   */
+  status: number
 }

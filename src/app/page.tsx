@@ -7,7 +7,6 @@ import { QuestionBankVo } from '@/api/questionBank/type'
 import QuestionTable from '@/components/QuestionTable'
 import { QuestionVO } from '@/api/question/type'
 import questionApi from '@/api/question'
-import './index.scss'
 
 // 本页面使用服务端渲染，禁用静态生成
 export const dynamic = 'force-dynamic'
@@ -38,7 +37,7 @@ export default async function HomePage() {
     <div id="homePage" className="max-width-content">
       <Flex justify="space-between" align="center">
         <Title level={3}>最新题库</Title>
-        <Link href={'/banks'}>查看更多</Link>
+        <Link href={'/bank'}>查看更多</Link>
       </Flex>
       <QuestionBankList questionBankList={questionBankList} />
       <Divider />
