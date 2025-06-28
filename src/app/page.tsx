@@ -1,13 +1,13 @@
 import Title from 'antd/es/typography/Title'
-import { Divider, Flex } from 'antd'
+import { Card, Divider, Flex } from 'antd'
 import Link from 'next/link'
 import questionBankApi from '@/api/questionBank'
-import questionApi from '@/api/question'
 import QuestionBankList from '@/components/QuestionBankList'
-import QuestionList from '@/components/QuestionList'
 import { QuestionBankVo } from '@/api/questionBank/type'
-import { QuestionVO } from '@/api/question/type'
 import QuestionTable from '@/components/QuestionTable'
+import { QuestionVO } from '@/api/question/type'
+import questionApi from '@/api/question'
+import './index.scss'
 
 // 本页面使用服务端渲染，禁用静态生成
 export const dynamic = 'force-dynamic'
@@ -18,7 +18,6 @@ export const dynamic = 'force-dynamic'
  */
 export default async function HomePage() {
   let questionBankList: QuestionBankVo[]
-  let questionList: QuestionVO[]
   const questionBankRes = await questionBankApi.getPublicList({
     pageSize: 12,
     sortField: 'createTime',
@@ -26,12 +25,14 @@ export default async function HomePage() {
   })
   questionBankList = questionBankRes.data.list ?? []
 
-  // const questionRes = await questionApi.getPublicList({
-  //   pageSize: 12,
-  //   sortField: 'createTime',
-  //   isAsc: true,
-  // })
-  // questionList = questionRes.data.list ?? []
+  let questionList: QuestionVO[]
+  let total
+  const defaultSearchParams = {
+    pageSize: 12,
+  }
+  const questionRes = await questionApi.getPublicList(defaultSearchParams)
+  questionList = questionRes.data.list ?? []
+  total = questionRes.data.total ?? 0
 
   return (
     <div id="homePage" className="max-width-content">
@@ -42,8 +43,13 @@ export default async function HomePage() {
       <QuestionBankList questionBankList={questionBankList} />
       <Divider />
       <Title level={3}>最新题目</Title>
-      {/*<QuestionList questionList={questionList} />*/}
-      <QuestionTable />
+      <Card>
+        <QuestionTable
+          defaultQuestionList={questionList}
+          defaultTotal={total}
+          defaultSearchParams={defaultSearchParams}
+        />
+      </Card>
     </div>
   )
 }

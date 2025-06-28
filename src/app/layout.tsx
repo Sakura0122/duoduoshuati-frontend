@@ -7,7 +7,9 @@ import userApi from '@/api/user'
 import userStore from '@/stores/user'
 import Permission from '@/app/permission'
 import Cookies from 'js-cookie'
-import { AntdNextRegistry } from '@/app/antd'
+import { App } from 'antd'
+import AntdGlobal from '@/utils/AntdGlobal'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
 
 const RootLayout = ({ children }: React.PropsWithChildren) => {
   const { setUserinfo } = userStore()
@@ -28,11 +30,14 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
   return (
     <html lang="zh">
       <body>
-        <AntdNextRegistry>
-          <BasicLayout>
-            <Permission>{children}</Permission>
-          </BasicLayout>
-        </AntdNextRegistry>
+        <AntdRegistry>
+          <App>
+            <AntdGlobal />
+            <BasicLayout>
+              <Permission>{children}</Permission>
+            </BasicLayout>
+          </App>
+        </AntdRegistry>
       </body>
     </html>
   )

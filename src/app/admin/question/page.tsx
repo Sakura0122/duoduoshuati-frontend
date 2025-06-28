@@ -345,6 +345,7 @@ const QuestionAdminPage: React.FC = () => {
 
           const res = await questionApi.getQuestionList({
             ...params,
+            currentPage: params.current,
             sortField,
             isAsc: sortOrder === 'ascend',
             ...filter,

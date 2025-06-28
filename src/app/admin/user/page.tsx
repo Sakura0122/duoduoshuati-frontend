@@ -191,6 +191,7 @@ const User: React.FC = () => {
 
           const res = await userApi.getUserList({
             ...params,
+            currentPage: params.current,
             sortField,
             isAsc: sortOrder === 'ascend',
             ...filter,

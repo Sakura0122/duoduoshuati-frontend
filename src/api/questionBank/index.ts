@@ -26,6 +26,9 @@ const questionBankApi = {
   getPublicList(data: PageDto<QuestionBankListDto>) {
     return request.post<PageVo<QuestionBankVo>>('/questionBank/public/list', data)
   },
+  getQuestionBankById(id: string) {
+    return request.get<QuestionBankVo>(`/questionBank/${id}`)
+  },
   addQuestionToBank(data: AddQuestionToBankDto) {
     return request.post('/questionBank/addQuestion', data)
   },

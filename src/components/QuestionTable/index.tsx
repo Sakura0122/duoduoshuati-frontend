@@ -1,19 +1,20 @@
 'use client'
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
-import { ProTable } from '@ant-design/pro-components'
+import { ProTable, ProFormSelect } from '@ant-design/pro-components'
 import React, { useRef, useState } from 'react'
 import TagList from '@/components/TagList'
-import { TablePaginationConfig, Tag } from 'antd'
+import { Button, TablePaginationConfig } from 'antd'
 import Link from 'next/link'
 import { QuestionListDto, QuestionVO } from '@/api/question/type'
 import questionApi from '@/api/question'
+import { PageDto } from '@/types/type'
 
 interface Props {
   // 默认值（用于展示服务端渲染的数据）
   defaultQuestionList?: QuestionVO[]
   defaultTotal?: number
   // 默认搜索条件
-  defaultSearchParams?: QuestionListDto
+  defaultSearchParams?: PageDto<QuestionListDto>
 }
 
 /**
@@ -21,7 +22,7 @@ interface Props {
  *
  * @constructor
  */
-const QuestionTable: React.FC = (props: Props) => {
+const QuestionTable = (props: Props) => {
   const { defaultQuestionList, defaultTotal, defaultSearchParams = {} } = props
   const actionRef = useRef<ActionType>(null)
   // 题目列表
@@ -36,10 +37,13 @@ const QuestionTable: React.FC = (props: Props) => {
    */
   const columns: ProColumns<QuestionVO>[] = [
     {
-      title: '搜索',
-      dataIndex: 'searchText',
+      title: '标题',
+      dataIndex: 'keyword',
       valueType: 'text',
       hideInTable: true,
+      fieldProps: {
+        placeholder: '请输入标题',
+      },
     },
     {
       title: '标题',
@@ -70,6 +74,7 @@ const QuestionTable: React.FC = (props: Props) => {
           },
         ],
       },
+      sorter: true,
       render: (_, record) => {
         let color
         let text
@@ -92,10 +97,15 @@ const QuestionTable: React.FC = (props: Props) => {
     },
     {
       title: '标签',
-      dataIndex: 'tagList',
+      dataIndex: 'tags',
       valueType: 'select',
       fieldProps: {
         mode: 'tags',
+      },
+      renderFormItem: (_, config: any) => {
+        return (
+          <ProFormSelect style={{ width: '200px' }} placeholder={'请输入标签'} label={'标签'} {...config.fieldProps} />
+        )
       },
       render: (_, record) => {
         return <TagList tagList={JSON.parse(record.tags) || []} />
@@ -109,7 +119,7 @@ const QuestionTable: React.FC = (props: Props) => {
         actionRef={actionRef}
         size="large"
         search={{
-          labelWidth: 'auto',
+          filterType: 'light',
         }}
         options={false}
         rowKey="id"
@@ -131,20 +141,25 @@ const QuestionTable: React.FC = (props: Props) => {
             // 如果已有外层传来的默认数据，无需再次查询
             if (defaultQuestionList && defaultTotal) {
               return {
-                success: true, // 必须返回 success
-                data: defaultQuestionList, // 返回默认数据
-                total: defaultTotal, // 返回默认总数
+                success: true,
+                data: defaultQuestionList,
+                total: defaultTotal,
               }
             }
           }
 
-          const sortField = Object.keys(sort)?.[0]
-          const sortOrder = sort?.[sortField] ?? undefined
+          const sortParams =
+            Object.keys(sort).length > 0
+              ? {
+                  sortField: Object.keys(sort)[0], // 排序字段
+                  isAsc: sort[Object.keys(sort)[0]] === 'ascend', // 是否升序
+                }
+              : {}
 
           const res = await questionApi.getPublicList({
             ...params,
-            sortField,
-            isAsc: sortOrder === 'ascend',
+            ...sortParams,
+            currentPage: params.current,
             ...filter,
           })
 

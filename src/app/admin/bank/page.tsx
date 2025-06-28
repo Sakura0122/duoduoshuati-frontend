@@ -161,6 +161,7 @@ const QuestionBankAdminPage: React.FC = () => {
 
           const res = await questionBankApi.getQuestionBankList({
             ...params,
+            currentPage: params.current,
             sortField,
             isAsc: sortOrder === 'ascend',
             ...filter,

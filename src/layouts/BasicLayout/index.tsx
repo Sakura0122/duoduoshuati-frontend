@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { Dropdown, Input } from 'antd'
 import React from 'react'
 import GlobalFooter from '@/layouts/components/GlobalFooter'
@@ -12,12 +11,10 @@ import './index.scss'
 import menus, { getMenus } from '../../../config/menu'
 import userStore from '@/stores/user'
 import userApi from '@/api/user'
-
-const ProLayout = dynamic(() => import('@ant-design/pro-components').then((mod) => mod.ProLayout), {
-  // ssr: false,
-})
+import { ProLayout } from '@ant-design/pro-components'
 
 const SearchInput = () => {
+  const router = useRouter()
   return (
     <div
       key="SearchOutlined"
@@ -27,18 +24,16 @@ const SearchInput = () => {
         alignItems: 'center',
         marginInlineEnd: 24,
       }}
-      onMouseDown={(e) => {
-        e.stopPropagation()
-        e.preventDefault()
-      }}
     >
-      <Input
+      <Input.Search
         style={{
           borderRadius: 4,
           marginInlineEnd: 12,
         }}
         placeholder="搜索题目"
-        variant="borderless"
+        onSearch={(value: string) => {
+          router.push(`/questions?q=${value}`)
+        }}
       />
     </div>
   )
@@ -58,11 +53,12 @@ export default function BasicLayout({ children }: BasicLayoutProps) {
     reset()
     router.push('/user/login')
   }
+
   return (
     <div className="basicLayout">
       <ProLayout
-        layout="top"
         title="多多刷题平台"
+        layout="top"
         logo={<Image src="/assets/logo.png" alt="多多刷题网站" width={32} height={32} />}
         location={{ pathname }}
         footerRender={() => <GlobalFooter />}

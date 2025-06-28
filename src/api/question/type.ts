@@ -87,7 +87,7 @@ export interface QuestionListDto {
   /**
    * 题库id
    */
-  questionBankId?: number
+  questionBankId?: string
   /**
    * 标签
    */
