@@ -1,16 +1,15 @@
 'use server'
 import Title from 'antd/es/typography/Title'
 import QuestionTable from '@/components/QuestionTable'
-import './index.css'
 import questionApi from '@/api/question'
 
-type QuestionProps = {
+type QuestionsProps = {
   searchParams: {
     keyword: string
   }
 }
 
-const Question = async ({ searchParams }: QuestionProps) => {
+const Questions = async ({ searchParams }: QuestionsProps) => {
   // 获取 url 的查询参数
   const { keyword } = searchParams
   // 题目列表和总数
@@ -39,4 +38,4 @@ const Question = async ({ searchParams }: QuestionProps) => {
   )
 }
 
-export default Question
+export default Questions

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { UserInfoVo } from '@/api/user/type'
+import { UserRole } from '@/enums/UserRole'
 
 interface UserStore {
   userinfo: UserInfoVo
@@ -15,7 +16,7 @@ const userStore = create<UserStore>((set) => ({
     userRole: '',
   },
   setUserinfo: (userinfo: UserInfoVo) => set(() => ({ userinfo })),
-  reset: () => set(() => ({ userinfo: { userName: '未登录', userAvatar: '', userProfile: '', userRole: '' } })),
+  reset: () => set({ userinfo: { userName: '未登录', userAvatar: '', userProfile: '', userRole: UserRole.Not_Login } }),
 }))
 
 export default userStore

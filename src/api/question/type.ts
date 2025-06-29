@@ -156,3 +156,8 @@ export interface QuestionVO {
    */
   status: number
 }
+
+export interface AiGenerateQuestionsDto {
+  questionType: string
+  number: number
+}

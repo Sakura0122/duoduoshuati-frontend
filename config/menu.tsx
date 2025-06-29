@@ -11,7 +11,7 @@ const menus: MenuDataItem[] = [
     name: '主页',
   },
   {
-    path: '/bank',
+    path: '/banks',
     name: '题库',
   },
   {

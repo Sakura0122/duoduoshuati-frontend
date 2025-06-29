@@ -23,7 +23,6 @@ const plugins = [gfm(), highlight(), theme({ themeList })]
  */
 const MdEditor = (props: Props) => {
   const { value = '', onChange, placeholder } = props
-  console.log(value)
 
   return (
     <div className="mdEditor">

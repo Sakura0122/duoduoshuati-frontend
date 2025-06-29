@@ -1,3 +1,5 @@
+import { UserRole } from '@/enums/UserRole'
+
 export interface User {
   id: string
   userAccount: string
@@ -76,7 +78,7 @@ export interface UserInfoVo {
   /**
    * 用户id
    */
-  id: string
+  id?: string
   /**
    * 手机号
    */
@@ -88,15 +90,15 @@ export interface UserInfoVo {
   /**
    * 用户账号
    */
-  userName: string
+  userName?: string
   /**
    * 用户简介
    */
-  userProfile: string
+  userProfile?: string
   /**
    * 用户角色
    */
-  userRole: string
+  userRole?: string
   /**
    * 工作经历
    */

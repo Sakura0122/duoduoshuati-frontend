@@ -188,12 +188,42 @@ const QuestionAdminPage: React.FC = () => {
       },
     },
     {
-      title: '创建用户',
-      dataIndex: 'userId',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-      hideInForm: true,
+      title: '是否VIP',
+      dataIndex: 'isVip',
+      valueType: 'select',
+      fieldProps: {
+        options: [
+          {
+            label: '否',
+            value: 0,
+          },
+          {
+            label: '是',
+            value: 1,
+          },
+        ],
+      },
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'select',
+      fieldProps: {
+        options: [
+          {
+            label: '待审核',
+            value: 0,
+          },
+          {
+            label: '通过',
+            value: 1,
+          },
+          {
+            label: '拒绝',
+            value: 2,
+          },
+        ],
+      },
     },
 
     {
