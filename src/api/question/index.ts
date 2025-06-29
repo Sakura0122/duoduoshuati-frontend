@@ -1,6 +1,14 @@
 import request from '@/utils/request'
-import { AddQuestionDto, Question, QuestionListDto, QuestionVO, UpdateQuestionDto } from '@/api/question/type'
+import {
+  AddQuestionDto,
+  AiGenerateQuestionsDto,
+  Question,
+  QuestionListDto,
+  QuestionVO,
+  UpdateQuestionDto,
+} from '@/api/question/type'
 import { PageDto, PageVo } from '@/types/type'
+import { QuestionBankVo } from '@/api/questionBank/type'
 
 const questionApi = {
   addQuestion(data: AddQuestionDto) {
@@ -22,11 +30,17 @@ const questionApi = {
    * 获取公开题库列表
    * @param data
    */
-  getPublicList: (data: PageDto<QuestionListDto>) => {
+  getPublicList(data: PageDto<QuestionListDto>) {
     return request.post<PageVo<QuestionVO>>('/question/public/list', data)
+  },
+  getQuestionById(id: string) {
+    return request.get<QuestionVO>(`/question/${id}`)
   },
   getQuestionBanksById(id: string) {
     return request.get<string[]>(`/question/${id}/questionBank`)
+  },
+  aiGenerateQuestions(data: AiGenerateQuestionsDto) {
+    return request.post<boolean>('/question/ai/generate', data)
   },
 }
 
