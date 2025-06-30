@@ -32,7 +32,7 @@ const SearchInput = () => {
         }}
         placeholder="搜索题目"
         onSearch={(value: string) => {
-          router.push(`/questions?keywords=${value}`)
+          router.push(`/questions?keyword=${value}`)
         }}
       />
     </div>
