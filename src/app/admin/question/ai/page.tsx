@@ -24,8 +24,8 @@ const AiGenerateQuestionPage = () => {
       message.success('操作成功')
     } finally {
       hide()
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (

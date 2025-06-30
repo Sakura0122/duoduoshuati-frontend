@@ -13,7 +13,7 @@ const Banks = async () => {
     pageSize: 200,
     sortField: 'createTime',
   })
-  questionBankList = questionBankRes.data.records ?? []
+  questionBankList = questionBankRes.data.list ?? []
 
   return (
     <div id="banksPage" className="max-width-content">

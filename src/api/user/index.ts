@@ -35,6 +35,12 @@ const userApi = {
   getUserList(data: PageDto<UserListDto>) {
     return request.get<PageVo<User>>('/user/list', data)
   },
+  addUserSignIn() {
+    return request.post('/user/add/signIn')
+  },
+  getUserSignInRecord(year: number) {
+    return request.get<number[]>('/user/get/signIn', { year })
+  },
 }
 
 export default userApi

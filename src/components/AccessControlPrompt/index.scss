@@ -1,0 +1,49 @@
+.access-control-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .prompt-icon {
+    font-size: 48px;
+  }
+
+  .prompt-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .prompt-description {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 12px;
+  }
+
+  .prompt-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  // 类型特定样式
+  &.vip-prompt {
+    .prompt-title {
+      font-size: 20px;
+      color: #faad14;
+    }
+  }
+
+  &.login-prompt {
+    .prompt-icon {
+      font-size: 60px;
+      margin-bottom: 8px;
+    }
+
+    .prompt-title {
+      font-size: 32px;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+  }
+}

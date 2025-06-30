@@ -1,68 +1,86 @@
-import axios from 'axios'
-import type { Method, AxiosRequestConfig } from 'axios'
 import type { Data } from '@/types/type.ts'
 import { message } from '@/utils/AntdGlobal'
 import userStore from '@/stores/user'
 import Cookies from 'js-cookie'
+import { getServerToken } from '@/utils/token'
 
-const service = axios.create({
-  baseURL: 'http://localhost:8101',
-  // timeout: 10000,
-  withCredentials: true,
-})
+export async function getToken() {
+  if (typeof window === 'undefined') {
+    return getServerToken()
+  }
+  return Cookies.get('duoduoshuati-token')
+}
 
-service.interceptors.request.use(
-  (config) => {
-    // const token = getToken()
-    // if (token) {
-    //   config.headers['sakura-token'] = token
-    // }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  },
-)
+/**
+ * 封装 fetch 请求
+ */
+const baseRequest = async <T>(
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  url: string,
+  submitData?: object,
+  config?: RequestInit,
+): Promise<Data<T>> => {
+  const token = await getToken()
+  const headers: any = {
+    'Content-Type': 'application/json',
+    ...config?.headers,
+  }
 
-service.interceptors.response.use(
-  (res) => {
-    if (res.data.code === 200) {
-      return res.data
-    } else if (res.data.code === 40100) {
-      message.error(res.data.message || '登录过期，请重新登录')
+  if (token) {
+    headers['duoduoshuati-token'] = `${token}`
+  }
+
+  const requestOptions: RequestInit = {
+    method,
+    headers,
+    credentials: 'include', // 相当于 axios 的 withCredentials: true
+    ...config,
+  }
+
+  // 如果是 GET，参数放在 URL；否则放在 body
+  if (method === 'GET' && submitData) {
+    const params = new URLSearchParams(submitData as Record<string, string>)
+    url += `?${params.toString()}`
+  } else if (submitData) {
+    requestOptions.body = JSON.stringify(submitData)
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8101${url}`, requestOptions)
+    const data = await response.json()
+
+    // 处理响应拦截逻辑（类似 axios 的 interceptors.response）
+    if (data.code === 200) {
+      return data
+    } else if (data.code === 40100) {
+      console.log('token', token)
+      console.log(url)
+      message.error(data.message || '登录过期，请重新登录')
       Cookies.remove('duoduoshuati-token')
       userStore.getState().reset()
-      // 不是获取用户信息接口，或者不是登录页面，则跳转到登录页面
-      if (!res.request.responseURL.includes('user/userInfo') && !window.location.pathname.includes('/user/login')) {
+
+      // 如果不是获取用户信息接口，且不是登录页面，则跳转登录
+      if (
+        typeof window !== 'undefined' &&
+        !response.url.includes('user/userInfo') &&
+        !window.location.pathname.includes('/user/login')
+      ) {
         window.location.href = '/user/login'
       }
-      return Promise.reject(res.data)
+      throw data
     } else {
-      message.error(res.data.message || '网络异常')
-      return Promise.reject(res.data)
+      message.error(data.message || '网络异常')
+      throw data
     }
-  },
-  (error) => {
-    console.log(error)
-    message.error('请求错误')
-    return Promise.reject(error)
-  },
-)
-
-const baseRequest = (method: Method) => {
-  return <T>(url: string, submitData?: object, config?: AxiosRequestConfig) => {
-    return service.request<T, Data<T>>({
-      url,
-      method,
-      [method.toLowerCase() === 'get' ? 'params' : 'data']: submitData,
-      ...config,
-    })
+  } catch (error) {
+    console.error(error)
+    throw error
   }
 }
 
 const request = {
-  get: baseRequest('get'),
-  post: baseRequest('post'),
+  get: <T>(url: string, params?: object, config?: RequestInit) => baseRequest<T>('GET', url, params, config),
+  post: <T>(url: string, data?: object, config?: RequestInit) => baseRequest<T>('POST', url, data, config),
 }
 
 export default request

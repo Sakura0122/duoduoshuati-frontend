@@ -103,6 +103,10 @@ export interface UserInfoVo {
    * 工作经历
    */
   workExperience?: string
+  /**
+   * 创建时间
+   */
+  createTime?: string
 }
 
 export interface UserListDto {
@@ -145,6 +149,26 @@ export interface AddUserDto {
    * 用户角色
    */
   userRole: string
+  /**
+   * 手机号
+   */
+  phoneNumber: string
+  /**
+   * 邮箱
+   */
+  email: string
+  /**
+   * 年级
+   */
+  grade: string
+  /**
+   * 工作经验
+   */
+  workExperience: string
+  /**
+   * 擅长方向
+   */
+  expertiseDirection: string
 }
 
 export interface UpdateUserDto extends AddUserDto {

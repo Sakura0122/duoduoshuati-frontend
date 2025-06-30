@@ -4,16 +4,16 @@ import Title from 'antd/es/typography/Title'
 import TagList from '@/components/TagList'
 import MdViewer from '@/components/MdViewer'
 import { QuestionVO } from '@/api/question/type'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { themeList } from 'bytemd-plugin-theme'
 import userStore from '@/stores/user'
 import { UserRole } from '@/enums/UserRole'
 import { UserInfoVo } from '@/api/user/type'
 import { AnswerStatus } from '@/enums/answerStatus'
 import { useRouter } from 'next/navigation'
-import { EyeInvisibleOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons'
-
-// import useAddUserSignInRecord from '@/hooks/useAddUserSignInRecord'
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
+import AccessControlPrompt from '@/components/AccessControlPrompt'
+import useAddUserSignInRecord from '@/hooks/useAddUserSignInRecord'
 
 interface Props {
   question: QuestionVO
@@ -29,7 +29,7 @@ const QuestionCard = (props: Props) => {
   const { userinfo } = userStore()
   const router = useRouter()
   const [themeValue, setThemeValue] = useState<string>('github')
-  const [isAnswerVisible, setIsAnswerVisible] = useState(false)
+  const [isAnswerVisible, setIsAnswerVisible] = useState<boolean>(!!localStorage.getItem('showAnswer'))
 
   const getVipDisplayStatus = useCallback((question: QuestionVO, userinfo?: UserInfoVo): AnswerStatus => {
     if (userinfo?.userRole === UserRole.Not_Login) return AnswerStatus.REQUEST_LOGIN
@@ -41,7 +41,7 @@ const QuestionCard = (props: Props) => {
   const displayStatus = getVipDisplayStatus(question, userinfo)
 
   // 签到
-  // useAddUserSignInRecord()
+  useAddUserSignInRecord()
 
   return (
     <div className="question-card">
@@ -114,59 +114,8 @@ const QuestionCard = (props: Props) => {
                   </Button>
                 </div>
               ))}
-            {displayStatus === AnswerStatus.REQUEST_VIP && (
-              <div className="vip-upsell" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ fontSize: '48px', color: '#faad14', marginBottom: '16px' }}>
-                  <LockOutlined />
-                </div>
-                <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>会员专属内容</div>
-                <div style={{ fontSize: '16px', color: '#888', marginBottom: '24px' }}>
-                  对不起，本题目为会员专属，请先开通 VIP 后访问。
-                </div>
-                <Button
-                  type="primary"
-                  href="/user/center"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                  }}
-                >
-                  开通 VIP
-                </Button>
-              </div>
-            )}
-            {displayStatus === AnswerStatus.REQUEST_LOGIN && (
-              <div className="vip-upsell" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ fontSize: '48px', color: '#aaa', marginBottom: '8px' }}>
-                  <LockOutlined style={{ fontSize: '60px', color: '#aaa' }} />
-                </div>
-                <div
-                  style={{
-                    fontSize: '32px',
-                    fontWeight: 'bold',
-                    marginBottom: '16px',
-                    color: '#aaa',
-                  }}
-                >
-                  登录后可查看答案
-                </div>
-                <Button
-                  type="primary"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                  }}
-                  onClick={() => router.push('/login')}
-                >
-                  去登录
-                </Button>
-              </div>
-            )}
-            )
+            {displayStatus === AnswerStatus.REQUEST_VIP && <AccessControlPrompt type={'vip'} />}
+            {displayStatus === AnswerStatus.REQUEST_LOGIN && <AccessControlPrompt type={'login'} />}
           </>
         ) : (
           <Skeleton />

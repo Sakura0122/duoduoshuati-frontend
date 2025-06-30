@@ -19,6 +19,10 @@ const menus: MenuDataItem[] = [
     name: '题目',
   },
   {
+    path: '/mockInterview/add',
+    name: 'AI 模拟面试',
+  },
+  {
     path: '/admin',
     name: '管理',
     icon: <CrownOutlined />,

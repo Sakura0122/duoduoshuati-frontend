@@ -249,7 +249,6 @@ const QuestionAdminPage: React.FC = () => {
         <Space size="middle">
           <Typography.Link
             onClick={() => {
-              console.log(record)
               setCurrentRow(record)
               setUpdateModalVisible(true)
             }}

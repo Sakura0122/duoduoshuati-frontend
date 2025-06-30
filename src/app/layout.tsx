@@ -12,14 +12,18 @@ import AntdGlobal from '@/utils/AntdGlobal'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 
 const RootLayout = ({ children }: React.PropsWithChildren) => {
-  const { setUserinfo } = userStore()
+  const { setUserinfo, reset } = userStore()
 
   const init = useCallback(async () => {
     if (Cookies.get('duoduoshuati-token')) {
       try {
         const res = await userApi.getUserInfo()
         setUserinfo(res.data)
-      } catch (e) {}
+      } catch (e) {
+        reset()
+      }
+    } else {
+      reset()
     }
   }, [])
 

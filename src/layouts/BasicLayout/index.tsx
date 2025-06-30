@@ -4,7 +4,7 @@ import { Dropdown, Input } from 'antd'
 import React from 'react'
 import GlobalFooter from '@/layouts/components/GlobalFooter'
 import Image from 'next/image'
-import { GithubFilled, LogoutOutlined } from '@ant-design/icons'
+import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import './index.scss'
@@ -72,14 +72,22 @@ export default function BasicLayout({ children }: BasicLayoutProps) {
                 menu={{
                   items: [
                     {
+                      key: 'userCenter',
+                      icon: <UserOutlined />,
+                      label: '个人中心',
+                    },
+                    {
                       key: 'logout',
                       icon: <LogoutOutlined />,
                       label: '退出登录',
                     },
                   ],
-                  onClick: async (e) => {
-                    if (e.key === 'logout') {
+                  onClick: async (event: { key: React.Key }) => {
+                    const { key } = event
+                    if (key === 'logout') {
                       await handleLogout()
+                    } else if (key === 'userCenter') {
+                      router.push('/user/center')
                     }
                   },
                 }}
