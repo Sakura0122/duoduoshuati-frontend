@@ -3,6 +3,7 @@ import { message } from '@/utils/AntdGlobal'
 import userStore from '@/stores/user'
 import Cookies from 'js-cookie'
 import { getServerToken } from '@/utils/token'
+import { BASE_URL } from '../../config'
 
 export async function getToken() {
   if (typeof window === 'undefined') {
@@ -42,7 +43,7 @@ const baseRequest = async <T>(
   }
 
   try {
-    const response = await fetch(`http://localhost:8101${url}`, requestOptions)
+    const response = await fetch(`${BASE_URL}${url}`, requestOptions)
     const data = await response.json()
 
     if (data.code === 200) {

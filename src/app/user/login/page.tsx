@@ -13,13 +13,14 @@ import authApi from '@/api/auth'
 import userApi from '@/api/user'
 import type { UserLoginDto } from '@/api/user/type'
 import userStore from '@/stores/user'
+import { v4 as uuidv4 } from 'uuid'
 
 const Login = () => {
   const [form] = ProForm.useForm()
   const router = useRouter()
 
   // 获取验证码
-  const key = useRef(crypto.randomUUID())
+  const key = useRef(uuidv4())
   const [captchaImg, setCaptchaImg] = useState('')
   const getCodeData = async () => {
     const res = await authApi.getCaptcha(key.current)

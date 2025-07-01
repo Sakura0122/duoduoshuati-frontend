@@ -25,7 +25,7 @@ const Questions = async ({ searchParams }: QuestionsProps) => {
   total = res.data.total ?? 0
 
   return (
-    <div id="questionsPage" className="max-width-content">
+    <div id="questionsPage" className="max-width-content" style={{ width: '100%' }}>
       <Title level={3}>题目大全</Title>
       <QuestionTable
         defaultQuestionList={questionList}

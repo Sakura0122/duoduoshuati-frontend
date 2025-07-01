@@ -1,4 +1,3 @@
-'use client'
 import { List, Typography } from 'antd'
 import { CommentVo } from '@/api/comment/type'
 import { useState } from 'react'

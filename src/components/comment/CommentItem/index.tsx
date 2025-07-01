@@ -2,7 +2,6 @@ import { Avatar, Button, Divider, Popconfirm, Space, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { CommentVo } from '@/api/comment/type'
 import { message } from '@/utils/AntdGlobal'
-import commentApi from '@/api/comment'
 import { DeleteOutlined } from '@ant-design/icons'
 
 interface CommentItemProps {
