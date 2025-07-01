@@ -134,7 +134,7 @@ export interface QuestionVO {
   /**
    * 题目id
    */
-  id: number
+  id: string
   /**
    * 题目标签
    */
@@ -152,9 +152,9 @@ export interface QuestionVO {
    */
   isVip: number
   /**
-   * status
+   * 收藏数量
    */
-  status: number
+  favourNum: number
 }
 
 export interface AiGenerateQuestionsDto {

@@ -11,9 +11,6 @@ export async function getToken() {
   return Cookies.get('duoduoshuati-token')
 }
 
-/**
- * 封装 fetch 请求
- */
 const baseRequest = async <T>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   url: string,
@@ -33,11 +30,10 @@ const baseRequest = async <T>(
   const requestOptions: RequestInit = {
     method,
     headers,
-    credentials: 'include', // 相当于 axios 的 withCredentials: true
+    credentials: 'include',
     ...config,
   }
 
-  // 如果是 GET，参数放在 URL；否则放在 body
   if (method === 'GET' && submitData) {
     const params = new URLSearchParams(submitData as Record<string, string>)
     url += `?${params.toString()}`
@@ -49,12 +45,9 @@ const baseRequest = async <T>(
     const response = await fetch(`http://localhost:8101${url}`, requestOptions)
     const data = await response.json()
 
-    // 处理响应拦截逻辑（类似 axios 的 interceptors.response）
     if (data.code === 200) {
       return data
     } else if (data.code === 40100) {
-      console.log('token', token)
-      console.log(url)
       message.error(data.message || '登录过期，请重新登录')
       Cookies.remove('duoduoshuati-token')
       userStore.getState().reset()
@@ -65,7 +58,8 @@ const baseRequest = async <T>(
         !response.url.includes('user/userInfo') &&
         !window.location.pathname.includes('/user/login')
       ) {
-        window.location.href = '/user/login'
+        const callbackUrl = encodeURIComponent(window.location.pathname + window.location.search)
+        window.location.href = `/user/login?callback=${callbackUrl}`
       }
       throw data
     } else {

@@ -9,6 +9,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  sassOptions: {
+    silenceDeprecations: ['legacy-js-api'],
+  },
 }
 
 export default nextConfig

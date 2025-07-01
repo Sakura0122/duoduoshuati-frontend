@@ -103,3 +103,10 @@ export interface DeleteQuestionFromBankDto {
   questionBankId: string
   questionIds: string[]
 }
+
+export interface QuestionBankWithSimpleQuestionsVo extends QuestionBankVo {
+  questionList: {
+    id: string
+    title: string
+  }[]
+}

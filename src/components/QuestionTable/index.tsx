@@ -17,6 +17,8 @@ interface Props {
   defaultTotal?: number
   // 默认搜索条件
   defaultSearchParams?: PageDto<QuestionListDto>
+  // 请求
+  defaultRequest?: (params: PageDto<QuestionListDto>) => Promise<any>
 }
 
 /**
@@ -25,7 +27,12 @@ interface Props {
  * @constructor
  */
 const QuestionTable = (props: Props) => {
-  const { defaultQuestionList, defaultTotal, defaultSearchParams = {} } = props
+  const {
+    defaultQuestionList,
+    defaultTotal,
+    defaultSearchParams = {},
+    defaultRequest = questionApi.getPublicList,
+  } = props
   const actionRef = useRef<ActionType>(null)
   // 题目列表
   const [questionList, setQuestionList] = useState<QuestionVO[]>(defaultQuestionList || [])
@@ -98,6 +105,24 @@ const QuestionTable = (props: Props) => {
       },
     },
     {
+      title: '会员专属',
+      dataIndex: 'isVip',
+      valueType: 'select',
+      hideInTable: true,
+      fieldProps: {
+        options: [
+          {
+            label: '否',
+            value: 0,
+          },
+          {
+            label: '是',
+            value: 1,
+          },
+        ],
+      },
+    },
+    {
       title: '标签',
       dataIndex: 'tags',
       valueType: 'select',
@@ -163,7 +188,7 @@ const QuestionTable = (props: Props) => {
                 }
               : {}
 
-          const res = await questionApi.getPublicList({
+          const res = await defaultRequest({
             ...params,
             ...sortParams,
             currentPage: params.current,

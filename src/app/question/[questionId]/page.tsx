@@ -23,7 +23,7 @@ export default async function QuestionPage({ params }: QuestionProps) {
 
   return (
     <div id="questionPage">
-      <QuestionCard question={question} />
+      <QuestionCard question={question} showComments={true} />
     </div>
   )
 }

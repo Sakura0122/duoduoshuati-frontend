@@ -1,5 +1,15 @@
 .question-table {
-  .ant-pro-table-list-toolbar-right {
-    justify-content: start;
+  .ant-pro-card {
+    .ant-pro-card-body {
+      //padding: 0 0 16px;
+    }
+  }
+
+  .ant-pro-table-list-toolbar-container {
+    //padding-top: 0;
+
+    .ant-pro-table-list-toolbar-right {
+      justify-content: start;
+    }
   }
 }

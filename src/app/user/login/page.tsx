@@ -31,10 +31,17 @@ const Login = () => {
     try {
       await userApi.login({ ...values, key: key.current })
       message.success('登录成功！')
-      router.replace('/')
+
       const res = await userApi.getUserInfo()
       setUserinfo(res.data)
       form.resetFields()
+
+      // 获取回调地址
+      const searchParams = new URLSearchParams(window.location.search)
+      const callbackUrl = searchParams.get('callback')
+
+      // 如果有回调地址则跳转，否则跳转首页
+      router.replace(callbackUrl ? decodeURIComponent(callbackUrl) : '/')
     } catch (e) {
       getCodeData()
     }

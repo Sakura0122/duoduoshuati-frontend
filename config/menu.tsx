@@ -43,6 +43,11 @@ const menus: MenuDataItem[] = [
         name: '题目管理',
         needRole: UserRole.ADMIN,
       },
+      {
+        path: '/admin/comment',
+        name: '评论管理',
+        needRole: UserRole.ADMIN,
+      },
     ],
   },
 ] as MenuDataItem[]

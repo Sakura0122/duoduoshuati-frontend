@@ -186,7 +186,7 @@ const User: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0]
+          const sortField = Object.keys(sort)?.[0] || 'updateTime'
           const sortOrder = sort?.[sortField] ?? undefined
 
           const res = await userApi.getUserList({

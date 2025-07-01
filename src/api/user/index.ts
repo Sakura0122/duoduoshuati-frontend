@@ -41,6 +41,9 @@ const userApi = {
   getUserSignInRecord(year: number) {
     return request.get<number[]>('/user/get/signIn', { year })
   },
+  exchangeVip(code: string) {
+    return request.post('/user/exchange/vip', { code })
+  },
 }
 
 export default userApi

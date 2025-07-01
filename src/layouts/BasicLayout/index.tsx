@@ -4,7 +4,7 @@ import { Dropdown, Input } from 'antd'
 import React from 'react'
 import GlobalFooter from '@/layouts/components/GlobalFooter'
 import Image from 'next/image'
-import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import './index.scss'
@@ -103,9 +103,9 @@ export default function BasicLayout({ children }: BasicLayoutProps) {
           if (props.isMobile) return []
           return [
             <SearchInput key="SearchInput" />,
-            <a target="_blank" key="a">
-              <GithubFilled />
-            </a>,
+            // <a target="_blank" key="a">
+            //   <GithubFilled />
+            // </a>,
           ]
         }}
         headerTitleRender={(logo, title, _) => {

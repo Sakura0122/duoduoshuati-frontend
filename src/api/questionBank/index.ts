@@ -6,6 +6,7 @@ import {
   QuestionBank,
   QuestionBankListDto,
   QuestionBankVo,
+  QuestionBankWithSimpleQuestionsVo,
   UpdateQuestionBankDto,
 } from '@/api/questionBank/type'
 import { PageDto, PageVo } from '@/types/type'
@@ -28,6 +29,9 @@ const questionBankApi = {
   },
   getQuestionBankById(id: string) {
     return request.get<QuestionBankVo>(`/questionBank/${id}`)
+  },
+  getQuestionBankWithSimpleQuestions(id: string) {
+    return request.get<QuestionBankWithSimpleQuestionsVo>(`/questionBank/${id}/questions/simple`)
   },
   addQuestionToBank(data: AddQuestionToBankDto) {
     return request.post('/questionBank/addQuestion', data)

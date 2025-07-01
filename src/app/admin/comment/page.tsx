@@ -1,39 +1,31 @@
 'use client'
-import CreateModal from './components/CreateModal'
-import UpdateModal from './components/UpdateModal'
-import { PlusOutlined } from '@ant-design/icons'
+
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { PageContainer, ProTable } from '@ant-design/pro-components'
-import { Button, message, Space, Typography } from 'antd'
-import React, { useRef, useState } from 'react'
-import { QuestionBank } from '@/api/questionBank/type'
-import questionBankApi from '@/api/questionBank'
-import { modal } from '@/utils/AntdGlobal'
+import { Space, Typography } from 'antd'
+import React, { useRef } from 'react'
+import { message, modal } from '@/utils/AntdGlobal'
+import commentApi from '@/api/comment'
+import { Comment } from '@/api/comment/type'
 
 /**
  * 题库管理页面
  *
  * @constructor
  */
-const QuestionBankAdminPage: React.FC = () => {
-  // 是否显示新建窗口
-  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false)
-  // 是否显示更新窗口
-  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false)
+const CommentPage: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
-  // 当前题库点击的数据
-  const [currentRow, setCurrentRow] = useState<QuestionBank>()
 
   /**
    * 删除节点
    *
    * @param row
    */
-  const handleDelete = async (row: QuestionBank) => {
+  const handleDelete = async (row: Comment) => {
     const hide = message.loading('正在删除')
     if (!row) return true
     try {
-      await questionBankApi.deleteQuestionBank(row.id)
+      await commentApi.deleteComment(row.id)
       hide()
       message.success('删除成功')
       actionRef?.current?.reload()
@@ -47,7 +39,7 @@ const QuestionBankAdminPage: React.FC = () => {
   /**
    * 表格列配置
    */
-  const columns: ProColumns<QuestionBank>[] = [
+  const columns: ProColumns<Comment>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -60,33 +52,29 @@ const QuestionBankAdminPage: React.FC = () => {
       title: '关键词',
       dataIndex: 'keyword',
       valueType: 'text',
+      hideInForm: true,
+      hideInTable: true,
+    },
+    {
+      title: '评论内容',
+      dataIndex: 'content',
+      valueType: 'text',
+      hideInForm: true,
+      hideInSearch: true,
+    },
+    {
+      title: '题目ID',
+      dataIndex: 'questionId',
+      valueType: 'text',
       hideInTable: true,
       hideInForm: true,
-      fieldProps: {
-        placeholder: '请输入标题',
-      },
     },
     {
-      title: '标题',
-      dataIndex: 'title',
+      title: '评论用户ID',
+      dataIndex: 'userId',
       valueType: 'text',
-      hideInSearch: true,
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-      width: 800,
-      valueType: 'text',
-      hideInSearch: true,
-    },
-    {
-      title: '图片',
-      dataIndex: 'picture',
-      valueType: 'image',
-      fieldProps: {
-        width: 64,
-      },
-      hideInSearch: true,
+      hideInTable: true,
+      hideInForm: true,
     },
     {
       title: '创建时间',
@@ -109,14 +97,6 @@ const QuestionBankAdminPage: React.FC = () => {
       render: (_, record) => (
         <Space size="middle">
           <Typography.Link
-            onClick={() => {
-              setCurrentRow(record)
-              setUpdateModalVisible(true)
-            }}
-          >
-            修改
-          </Typography.Link>
-          <Typography.Link
             type="danger"
             onClick={() => {
               modal.confirm({
@@ -137,29 +117,18 @@ const QuestionBankAdminPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<QuestionBank>
+      <ProTable<Comment>
         headerTitle={'查询表格'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            key="primary"
-            onClick={() => {
-              setCreateModalVisible(true)
-            }}
-          >
-            <PlusOutlined /> 新建
-          </Button>,
-        ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0] || 'updateTime'
           const sortOrder = sort?.[sortField] ?? undefined
 
-          const res = await questionBankApi.getQuestionBankList({
+          const res = await commentApi.getCommentList({
             ...params,
             currentPage: params.current,
             sortField,
@@ -175,31 +144,7 @@ const QuestionBankAdminPage: React.FC = () => {
         }}
         columns={columns}
       />
-      <CreateModal
-        visible={createModalVisible}
-        columns={columns}
-        onSubmit={() => {
-          setCreateModalVisible(false)
-          actionRef.current?.reload()
-        }}
-        onCancel={() => {
-          setCreateModalVisible(false)
-        }}
-      />
-      <UpdateModal
-        visible={updateModalVisible}
-        columns={columns}
-        oldData={currentRow}
-        onSubmit={() => {
-          setUpdateModalVisible(false)
-          setCurrentRow(undefined)
-          actionRef.current?.reload()
-        }}
-        onCancel={() => {
-          setUpdateModalVisible(false)
-        }}
-      />
     </PageContainer>
   )
 }
-export default QuestionBankAdminPage
+export default CommentPage

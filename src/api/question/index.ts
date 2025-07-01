@@ -8,7 +8,7 @@ import {
   UpdateQuestionDto,
 } from '@/api/question/type'
 import { PageDto, PageVo } from '@/types/type'
-import { QuestionBankVo } from '@/api/questionBank/type'
+import { CommentVo } from '@/api/comment/type'
 
 const questionApi = {
   addQuestion(data: AddQuestionDto) {
@@ -41,6 +41,18 @@ const questionApi = {
   },
   aiGenerateQuestions(data: AiGenerateQuestionsDto) {
     return request.post<boolean>('/question/ai/generate', data)
+  },
+  toggleQuestionFavour(id: string) {
+    return request.post<boolean>(`/question/${id}/favour`)
+  },
+  getFavourStatus(id: string) {
+    return request.get<boolean>(`/question/${id}/favour/status`)
+  },
+  getFavourQuestionList(data: PageDto<QuestionListDto>) {
+    return request.post<PageVo<QuestionVO>>('/question/favour/list', data)
+  },
+  getQuestionComments(id: string) {
+    return request.get<CommentVo[]>(`/question/${id}/comments`)
   },
 }
 
