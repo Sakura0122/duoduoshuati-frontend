@@ -12,6 +12,7 @@ import { Input } from 'antd'
 import authApi from '@/api/auth'
 import { message } from '@/utils/AntdGlobal'
 import userApi from '@/api/user'
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * 用户注册页面
@@ -22,7 +23,7 @@ const Register: React.FC = (props) => {
   const router = useRouter()
 
   // 获取验证码
-  const key = useRef(crypto.randomUUID())
+  const key = useRef(uuidv4())
   const [captchaImg, setCaptchaImg] = useState('')
   const getCodeData = async () => {
     const res = await authApi.getCaptcha(key.current)
